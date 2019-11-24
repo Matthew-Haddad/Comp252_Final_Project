@@ -28,12 +28,14 @@ void checkStockLevel();     // Ingredient as parameter
 void changeStockLevel();    // Ingredient as parameter
 void changeMinStockLevel(); // Ingredient as parameter
 Ingredient addIngredient();       // Ingredient as parameter      // done
-void editIngredient();      // Ingredient as parameter
+Ingredient editIngredient(Ingredient i);      // Ingredient as parameter
 void deleteIngredient();    // Ingredient as parameter
-void addMenuOption();             // Meal as parameter
+MenuOption addMenuOption();             // Meal as parameter
+void viewMenuOption(MenuOption m);                                          // new
 void editMenuOption();            // Meal as parameter
 void deleteMenuOption();          // Meal as parameter
-void addMenu();             // Menu as parameter
+Menu addMenu();             // Menu as parameter
+void viewMenu(Menu m);
 void editMenuItems();       // Menu as parameter
 void editMenuLayout();      // Menu as parameter
 void deleteMenu();          // Menu as parameter
@@ -73,40 +75,93 @@ Ingredient addIngredient(){
     std::cin >> cost;
     Ingredient newIngredient(name, quantity, cost);
     std::cout << "\n" << name << " added to Ingredients.\n";
-    //Ingredients.insert(0, &newIngredient);
-    
     return newIngredient;
 }
 
-//void printIngredients(){db.printIngredients();}
+Ingredient editIngredient(Ingredient i){
+    std::cout << "What is the new name of the ingredient?\n>> ";
+    std::string name;
+    std::cin >> name;
+    std::cout << "What is the new starting inventory?\n>> ";
+    int quantity;
+    std::cin >> quantity;
+    std::cout << "What is the new unit cost?\n>> ";
+    double cost;
+    std::cin >> cost;
+    i.name = name;
+    i.quantity = quantity;
+    i.cost = cost;
+    std::cout << "\n" << name << " added to Ingredients.\n";
+    return i;
+}
 
-void addMenuOption(){
-    MenuOption newMenuOption;
+MenuOption addMenuOption(){         // fills all menu option fields except ingredients
     option_select = 1;
     std::cout << "What is the name of the menu option you would like to add?\n>> ";
     std::string name;
-    std::cin >> name;
+    std::cin.ignore();
+    std::getline(std::cin, name);
     std::cout << "What is the unit cost of this menu option?\n>> ";
     double UnitCost;
+    std::cin.clear();
     std::cin >> UnitCost;
     std::cout << "What is the price of this menu option?\n>> ";
     double Price;
+    std::cin.clear();
     std::cin >> Price;
     std::cout << "What is the cook time for this menu option?\n>> ";
     double CookTime;
+    std::cin.clear();
     std::cin >> CookTime;
-    std::cout << "Time to select ingredients.\n";
-    while (option_select != 0){
-        std::cout << "Enter the number of ingredient from list below or enter 0 to finish adding ingredients:\n>> ";
-        //printIngredients();
-        std::cin >> option_select;
-        
-        //newMenuOption.pushMenuOptionIngredient(i);
+    MenuOption newMenuOption(name, UnitCost, Price, CookTime);
+    std::cout << "What are to cooking options for this menu option?\n";
+    std::string cookOption = " ";
+    while (cookOption != "done"){
+        std::cin.clear();
+        std::cout << "Enter a cooking option or enter 'done' to finish adding cooking options:\n>> ";
+        std::cin >> cookOption;
+        if(cookOption != "done")
+            newMenuOption.CookOptions.push_back(cookOption);
     }
-    //double NumSold = 0;
-    //double TotalRevenue = 0;
-    
-    std::vector<std::string> CookOptions;
+    return newMenuOption;
+}
+
+void viewMenuOption(MenuOption m){
+    std::cout << "\n\n" << m.name << "\nUnit Cost: " << m.UnitCost;
+    std::cout << "\nPrice: " << m.Price;
+    std::cout << "\nNumber Sold: " << m.NumSold;
+    std::cout << "\nTotal Revenue: " << m.TotalRevenue;
+    std::cout << "\nCook Time: " << m.CookTime;
+    std::cout << "\nIngredients:\n";
+    for (Ingredient i : m.Ingredients){
+        std::cout << "\t" << i.name << std::endl;
+    }
+    std::cout << "\nCooking Options:\n";
+    for (std::string i : m.CookOptions){
+        std::cout << "\t" << i << std::endl;
+    }
+}
+
+Menu addMenu(){
+    std::cout << "What is the name of this menu?\n>> ";
+    std::cin.ignore();
+    std::string name;
+    std::getline(std::cin, name);
+    Menu newMenu(name);
+    return newMenu;
+}
+
+void viewMenu(Menu m){
+    std::cout << "\n\n" << m.name << std::endl;
+    std::cout << "Menu Options:\n";
+    for (MenuOption i : m.MenuOptions){
+        std::cout << "\t" << i.name << std::endl;
+    }
+    std::cout << "Menu Discounts:\n";
+    for (Discount i : m.MenuDiscounts){
+        std::cout << "\t" << i.name << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 #endif /* Management_System_hpp */
