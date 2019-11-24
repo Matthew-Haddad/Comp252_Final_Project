@@ -16,7 +16,7 @@
 #include "Management_System.hpp"
 #include "Kitchen_System.hpp"
 #include "Order_System.hpp"
-
+//--------------------------------------class MainMenu---------------------------------------//new
 class MainMenu{
 public:
     MainMenu();
@@ -27,6 +27,8 @@ public:
     void open_menu_options();
     void open_ingredient_options(); // new
     void open_meal_options();       // new
+    void open_kitchen_system_options();//new
+	void open_order_system_options();//new
     
 private:
     std::vector<Ingredient> Ingredients;
@@ -38,7 +40,7 @@ private:
     std::vector<Table> Tables;
     int option_select;
 };
-
+//--------------------------------------class MainMenu---------------------------------------//new
 MainMenu::MainMenu(){
     std::cout << "Welcome to the Diner Management System!\n";
     std::cout << "Enter the number of the option you want or -1 to exit:\n";
@@ -52,6 +54,9 @@ MainMenu::MainMenu(){
             writeFileData();
             std::cout << "Thank you for using the Diner Management System. Have a good day.\n";
             exit(0);
+        default: 
+			std::cout << "Input does not match any of the options." << std::endl;//new
+			MainMenu();//new
     }
 }
 
@@ -220,6 +225,19 @@ void MainMenu::open_menu_options(){
         }
     }
 }
+
+void MainMenu::open_kitchen_system_options(){//new
+    std::cout << "Welcome to the diner kitchen system!\nSelect an option:\n";//new
+    std::cout << "\t[1]Display Active Orders\n\t[2]Display Progress of Each Active Order\n>> ";//new
+    std::cin >> option;//new
+    switch(option){//new
+		case(1): displayActiveOrders(); break;//new
+		case(2): displayProgress(); break;//new
+		default: 
+			std::cout << "Input does not match any of the options." << std::endl;//new
+			open_kitchen_system_options();//new
+    }//new
+}//new
 
 void open_order_options(){
     std::cout << "Select a Order Option:\n";
