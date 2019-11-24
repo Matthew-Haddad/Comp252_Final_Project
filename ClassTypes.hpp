@@ -23,6 +23,14 @@ struct Ingredient{
 };
 
 struct MenuOption{
+    MenuOption(std::string n, double un, double p, double ct){
+        name = n;
+        UnitCost = un;
+        Price = p;
+        CookTime = ct;
+        NumSold = 0;
+        TotalRevenue = 0;
+    }
     std::string name;
     std::vector<Ingredient> Ingredients;
     double UnitCost;
@@ -41,6 +49,7 @@ struct Discount{
 };
 
 struct Menu{
+    Menu(std::string n){name = n;}
     std::string name;
     std::vector<MenuOption> MenuOptions;
     std::vector<Discount> MenuDiscounts;
