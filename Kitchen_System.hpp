@@ -1,46 +1,34 @@
-//
-//  Kitchen_System.hpp
-//  comp252_final_project
-//
-//  Created by Matthew Haddad on 10/31/19.
-//  Copyright © 2019 Matthew Haddad. All rights reserved.
-//
-
 #pragma once
 #ifndef Kitchen_System_h
 #define Kitchen_System_h
-
-#include "MainMenu.hpp"
-
-void open_kitchen_system_options();
-
+#include <iomanip>
+//-------------------------------kitchenSystemFunctionDeclarations--------------------------------//
 //display options
-void displayActiveOrders();//displays active orders
-void displayProgress();//displays elapsed time and progress of each order
-
+void displayActiveOrders(Table t, int i);//displays active orders
+void displayProgress(Table t, int i);//displays elapsed time and progress of each order
+void displayMealPreferences();//display preferences and optional choices of every meal
 //waiter options
 void informIP();//informs waiter with an order update of "in progress"
 void informReady();//informs waiter with an order update of "ready"
-
+//-------------------------------kitchenSystemFunctionDeclarations--------------------------------//
 int option = 0;
-
-void KitchenSystem(){
-    std::cout << "Welcome to the diner kitchen system.\nSelect an option:\n";
-    std::cout << "\t[1]Display Active Orders\n\t[2]Display Progress of Each Active Order\n>> ";
-    std::cin >> option;
-    if(option == 1){
-        displayActiveOrders();
-    }else if(option == 2){
-        displayProgress();
-    }
+//-----------------------------kitchenSystemFunctionImplementationns------------------------------//
+void displayActiveOrders(Table t, int i){//display active orders in a table, grab from vector<Table> Tables
+	for(MenuOption m: t.order.OrderOptions){
+		std::cout << " " << i << "\t" << m.name;
+	}
 }
 
-void displayActiveOrders(){
-    
+void displayProgress(Table t, int i){//display progress of orders based on timer
+	for(MenuOption m: t.order.OrderOptions){
+		int eTime=1;//
+		int progress = (eTime/m.ct)*100;
+		std::cout << i << "\t" << etime << "\t" << progress << m.name << std::endl;
+	}
 }
 
-void displayProgress(){
-    
+void displayMealPreferences(){//display meal preferences, grab from vector<MenuOptions> OrderOptions
+	
 }
 
 void informIP(){
@@ -51,7 +39,5 @@ void informReady(){
     
 }
 
-void open_kitchen_system_options(){};
-
-
+//-----------------------------kitchenSystemFunctionImplementationns------------------------------//
 #endif
