@@ -14,8 +14,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <vector>
 
 struct Ingredient{
+    Ingredient(std::string n){ name = n;}
     Ingredient(std::string n, int q, double c){name = n; quantity = q; cost = c;}
     std::string name;
     int quantity;
@@ -23,6 +26,7 @@ struct Ingredient{
 };
 
 struct MenuOption{
+    MenuOption(std::string n){ name = n;}
     MenuOption(std::string n, double un, double p, double ct){
         name = n;
         UnitCost = un;
@@ -30,6 +34,14 @@ struct MenuOption{
         CookTime = ct;
         NumSold = 0;
         TotalRevenue = 0;
+    }
+    MenuOption(std::string n, double un, double p, double ct, double ns, double tr){
+        name = n;
+        UnitCost = un;
+        Price = p;
+        CookTime = ct;
+        NumSold = ns;
+        TotalRevenue = tr;
     }
     std::string name;
     std::vector<Ingredient> Ingredients;
@@ -61,6 +73,7 @@ struct Order{
 };
 
 struct Waiter{
+    Waiter(std::string n){ name = n;}
     std::string name;
     std::vector<Order> WaiterOrders;
 };
@@ -68,7 +81,7 @@ struct Waiter{
 struct Table{
     int number;
     Waiter waiter;
-    Order order;
+    std::vector<Order> orders;
 };
 
 #endif /* ClassTypes_hpp */
