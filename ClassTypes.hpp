@@ -70,6 +70,8 @@ struct Menu{
 struct Order{
     std::vector<MenuOption> OrderOptions;
     double orderPrice;
+    bool orderInProgress;
+	bool orderComplete;
 };
 
 struct Waiter{
