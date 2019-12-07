@@ -11,7 +11,11 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include "ClassTypes.hpp"
+using std::cerr;
+using std::fstream;
+using std::endl;
 
 void open_management_system_options();
 void open_menu_options();
@@ -20,37 +24,53 @@ void open_waiter_options();
 void open_discount_options();
 void open_seating_options();
 
+void saveDiscountData(){};
+void saveMenuData(){};
+void saveOrderData(){};
+void saveWaiterData(){};
+void saveTableData(){};
+
+
+
 // viewing options
-void printIngredients();                                    // done
+void printIngredients();
 
 // menu options
-void checkStockLevel();     // Ingredient as parameter
-void changeStockLevel();    // Ingredient as parameter
-void changeMinStockLevel(); // Ingredient as parameter
-Ingredient addIngredient();       // Ingredient as parameter      // done
-Ingredient editIngredient(Ingredient i);      // Ingredient as parameter
-void deleteIngredient();    // Ingredient as parameter
-MenuOption addMenuOption();             // Meal as parameter
-void viewMenuOption(MenuOption m);                                          // new
-void editMenuOption();            // Meal as parameter
-void deleteMenuOption();          // Meal as parameter
-Menu addMenu();             // Menu as parameter
+void checkStockLevel();
+void changeStockLevel();
+void changeMinStockLevel();
+
+// Ingredient Functions
+Ingredient addIngredient();
+Ingredient editIngredient(Ingredient i);
+void deleteIngredient();
+void saveIngredientData(Ingredient i);
+
+// MenuOption Functions
+MenuOption addMenuOption();
+void viewMenuOption(MenuOption m);
+void editMenuOption();
+void deleteMenuOption();
+void saveMenuOptionData(MenuOption i);
+
+// Menu Functions
+Menu addMenu();
 void viewMenu(Menu m);
-void editMenuItems();       // Menu as parameter
-void editMenuLayout();      // Menu as parameter
-void deleteMenu();          // Menu as parameter
+void editMenuItems();
+void editMenuLayout();
+void deleteMenu();
 
 // order options
-void displayOrderStats();   // Order as parameter
+void viewCompletedOrders();
 
 // waiter options
-void addWaiter();           // Waiter as parameter
+void addWaiter();
 
 // discount options
-void addDiscount();         // Discount as parameter
-void editDiscount();        // Discount as parameter
-void deleteDiscount();      // Discount as parameter
-void editMenuDiscount();    // Menu as parameter
+void addDiscount();
+void editDiscount();
+void deleteDiscount();
+void editMenuDiscount();
 
 // seating options
 void editSeatingLayout();
@@ -94,6 +114,15 @@ Ingredient editIngredient(Ingredient i){
     std::cout << "\n" << name << " added to Ingredients.\n";
     return i;
 }
+
+void saveIngredientData(Ingredient i){
+    std::ofstream fout;
+    fout.open("Ingredient_data.txt", std::ios::app);
+    fout << i.name << "\n" << i.quantity << "\n" << i.cost << endl;
+    fout.close();
+}
+
+
 
 MenuOption addMenuOption(){         // fills all menu option fields except ingredients
     option_select = 1;
@@ -141,6 +170,23 @@ void viewMenuOption(MenuOption m){
         std::cout << "\t" << i << std::endl;
     }
 }
+
+void saveMenuOptionData(MenuOption m){
+    std::ofstream fout;
+    fout.open("MenuOption_data.txt", std::ios::app);
+    fout << m.name << "\n" << m.UnitCost << "\n" << m.Price << endl;
+    fout << m.CookTime << "\n" << m.NumSold << "\n"  << m.TotalRevenue << endl;
+    for ( Ingredient i : m.Ingredients){
+        fout << i.name << endl;
+    }
+    fout << endl;
+    for ( std::string c : m.CookOptions){
+        fout << c << endl;
+    }
+    fout << endl;
+    fout.close();
+}
+
 
 Menu addMenu(){
     std::cout << "What is the name of this menu?\n>> ";
