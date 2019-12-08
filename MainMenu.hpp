@@ -18,7 +18,7 @@
 
 class MainMenu{
 public:
-    MainMenu();
+    void mMenu();
     
     void readFileData();
     void writeFileData();
@@ -55,7 +55,7 @@ private:
 };
 
 
-MainMenu::mMenu(){
+void MainMenu::mMenu(){
 //	readFileData();
 	std::cout << "Welcome to the Diner Management System!\n";
 	std::cout << "Enter the number of the option you want or -1 to exit:\n";
