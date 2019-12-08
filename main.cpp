@@ -1,16 +1,13 @@
-//
-//  main.cpp
-//  comp252_final
-//
-//  Created by Matthew Haddad on 11/9/19.
-//  Copyright © 2019 Matthew Haddad. All rights reserved.
-//
-
 #include <iostream>
+#include <iomanip>
+#include <stdlib.h>
+#include <unistd.h>
 #include "MainMenu.hpp"
 
-int main() {
+int hours = 0; int minutes = 0; int seconds = 0;
+
+int main(){
     MainMenu menu;
-    
+	menu.mMenu();
     return 0;
 }
