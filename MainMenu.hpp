@@ -55,21 +55,24 @@ private:
 };
 
 
-MainMenu::MainMenu(){
-    readFileData();
-    std::cout << "Welcome to the Diner Management System!\n";
-    std::cout << "Enter the number of the option you want or -1 to exit:\n";
-    std::cout << "1. Management System\n2. Order System\n3. Kitchen System\n>> ";
-    std::cin >> option_select;
-    switch(option_select){
-        case(1): open_management_system_options(); break;
-        case(2): open_order_system_options(); break;
-        case(3): open_kitchen_system_options(); break;
-        case(-1):
-            writeFileData();
-            std::cout << "Thank you for using the Diner Management System. Have a good day.\n";
-            exit(0);
-    }
+MainMenu::mMenu(){
+//	readFileData();
+	std::cout << "Welcome to the Diner Management System!\n";
+	std::cout << "Enter the number of the option you want or -1 to exit:\n";
+	std::cout << "\t[1]Management System\n\t[2]Order System\n\t[3]Kitchen System\n>> ";//new
+	std::cin >> option_select;
+	switch(option_select){
+		case(1): open_management_system_options(); break;
+		case(2): open_order_system_options(); break;
+		case(3): open_kitchen_system_options(); break;
+		case(-1):
+//			writeFileData();
+			std::cout << "Thank you for using the Diner Management System. Have a good day.\n";
+			exit(0);
+		default: 
+			std::cout << "Input does not match any of the options." << std::endl;
+			mMenu();
+	}
 }
 
 void MainMenu::open_management_system_options(){
@@ -169,31 +172,47 @@ void MainMenu::open_kitchen_system_options(){
 			std::cout << " -------------------------------------------------------" << std::endl;
 			std::cout << "| Table #\tActive Order(s)\t\t\t\t|" << std::endl;
 			std::cout << " -------------------------------------------------------" << std::endl;
-			std::cout << "\t1\tHamburger" << std::endl;//example
-			std::cout << "\t2\tMilk Shake" << std::endl;//exmaple
-			std::cout << "\t3\tCoke" << std::endl;//example
-			
+//			std::cout << "\t1\tHamburger" << std::endl;//example
+//			std::cout << "\t2\tMilk Shake" << std::endl; std::cout << "\t3\tCoke" << std::endl;//example
+
+			//displays active orders from Orders
+			int oCount =1;
+			for(Order o: Orders){
+				for(MenuOption m: o.OrderOptions){
+					displayActiveOrders(m, oCount);
+				}
+				oCount++;
+			}
+
+			//displays active orders from Tables
 			int tCount = 1;
 			for(Table t: Tables){
-				displayActiveOrders(t,tCount);
+				for(Order o: t.orders){
+					displayActiveTableOrders(t, tCount);
+				}
 				tCount++;
 			}
-			std::cout << " -------------------------------------------------------\n" << std::endl;
+			std::cout << " -------------------------------------------------------end\n" << std::endl;
 			break;
 		}
 		case(2):{
-			time_t current = time(NULL);
-			std::cout << current << std::endl;
 			std::cout << "\n[ORDERS PROGRESS]\n";
 			std::cout << " -------------------------------------------------------------------------------" << std::endl;
 			std::cout << "| Table #\tElapsed Time\tProgress\tOrder\t\t\t\t|" << std::endl;
 			std::cout << " -------------------------------------------------------------------------------" << std::endl;
-			std::cout << "\t1\t00:01\t\t1%\t\tHamburger" << std::endl;//example
-			
+//			std::cout << "\t1\t00:01\t\t1%\t\tHamburger" << std::endl;//example
 			int tCount = 1;
 			for(Table t: Tables){
-				displayProgress(t,tCount); 
+				displayTableProgress(t,tCount); 
 				tCount++;
+			}
+			int oCount =1;
+			for(Order o: Orders){
+				std::cout << o.orderBeginTime;
+				for(MenuOption m: o.OrderOptions){
+					displayOrderProgress(o, oCount);
+				}
+				oCount++;
 			}
 			std::cout << " -------------------------------------------------------------------------------\n" << std::endl;
 			break;
@@ -203,7 +222,7 @@ void MainMenu::open_kitchen_system_options(){
 			std::cout << " ---------------------------------------------------------------------------------------------------------------" << std::endl;
 			std::cout << "| Order Name\tCook Options\t\t\t\t\tIngredients(Optional to remove)\t\t\t|" << std::endl;
 			std::cout << " ---------------------------------------------------------------------------------------------------------------" << std::endl;
-			std::cout << "  Hamburger\tRare\\ Medium Rare\\ Fully Cooked\\ Overcooked\\ \tChicken Patty\\ Lettuce\\ Tomato\\ Fish Patty\\" << std::endl;
+//			std::cout << "  Hamburger\tRare\\ Medium Rare\\ Fully Cooked\\ Overcooked\\ \tChicken Patty\\ Lettuce\\ Tomato\\ Fish Patty\\" << std::endl;
 			
 			for(Menu m: Menus){
 				displayMealPreferences(m); 
@@ -212,7 +231,7 @@ void MainMenu::open_kitchen_system_options(){
 			break;
 		}
 		case(4):{
-			MainMenu();
+			mMenu();
 		}
 		default:{
 			std::cout << "Input does not match any of the options." << std::endl;
@@ -252,7 +271,10 @@ void MainMenu::open_order_system_options(){
 					for(MenuOption m: o.OrderOptions){
 						std::cout << counter << ". " << m.name << "\t" << m.Price << "\t"  << "\n";
 					}
-					informOrderIP(o);//new
+						time_t now = time(NULL);//new
+						o.orderBeginTime = now;//new
+						std::cout << o.orderBeginTime << std::endl;
+						informOrderIP(o);//new
 					counter++;
 				}
 				goto orderSystem;
