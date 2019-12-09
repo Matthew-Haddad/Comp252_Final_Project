@@ -1,0 +1,13 @@
+bun
+carrot
+pear
+
+rare
+medium
+bun
+carrot
+pear
+
+rare
+medium
+

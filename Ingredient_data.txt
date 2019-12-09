@@ -1,0 +1,15 @@
+bun
+45
+67
+patty
+99
+69
+carrot
+45
+23
+apple
+85
+71
+pear
+54
+34
