@@ -1,6 +1,7 @@
 #pragma once
 #pragma warning(disable:4996)
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <chrono>
@@ -9,6 +10,7 @@
 
 
 int userChoice;
+int tableCounter = 1;
 void open_order_system_options();
 void orderSystemStartMenu();
 
@@ -19,14 +21,14 @@ void orderSystemMenu();
 
 /*ADD NEW ORDER SECTION*/
 Order newOrderToGo();					 /*Add a order without defining a table (Take-Out Order)*/
-Order newOrderTable();                    /*Add a new order to a table*/
-void addToExistingOrder();               /*Add a suborder to an existing order*/
+Table newOrderTable();                    /*Add a new order to a table*/
+Order addToExistingOrder();               /*Add a suborder to an existing order*/
 
 /*VIEW OPTIONS SECTION*/
-void viewActiveSubOrder();              /*view active sub order*/
+void viewActiveSubOrder();               /*view active sub order*/
 void viewOptionalIngredients();          /*View optional ingredients in a meal*/
 void viewCookingPreferences();           /*view cooking preferences of ingredients that can be cooked different ways*/
-void viewAllSubOrders();               /*view the status of all active suborders*/
+void viewAllSubOrders();                 /*view the status of all active suborders*/
 void viewTransactionList();              /*view the transaction list of current order*/
 void viewActiveMenu();                   /*only view the active menu*/
 
@@ -45,40 +47,6 @@ void drinksAlert(); /*Alert waiter when the drinks are complete*/
 
 /********************************************************************ADD SECTION*******************************************************************************/
 
-Order newOrderToGo()
-{
-	std::cout << "ORDER TO GO\n";
-	std::cout << "What would you like to order?\n";
-	viewActiveMenu();
-	std::cin >> userChoice;
-	auto start = std::chrono::system_clock::now();
-	auto end = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsed_seconds = end - start;
-	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-	Order newOrder;
-	if (userChoice == 1)
-	{
-		MenuOption newMenuOption("Hamburger", 1.25, 7.45, 4.55);
-		newOrder.OrderOptions.push_back(newMenuOption);
-	}
-	else if (userChoice == 2)
-	{
-		MenuOption newMenuOption("MilkShake", 1.25, 7.45, 4.55);
-		newOrder.OrderOptions.push_back(newMenuOption);
-	}
-	else if (userChoice == 3)
-	{
-		MenuOption newMenuOption("Coke", 1.25, 7.45, 4.55);
-		newOrder.OrderOptions.push_back(newMenuOption);
-	}
-	return newOrder;
-}
-
-
-//Order newOrderTable()
-//{
-
-//}
 
 
 
@@ -89,10 +57,10 @@ Order newOrderToGo()
 
 void viewActiveSubOrder()
 {
-	std::cout << "----------------------------------------------------------------------------------\n";
-	std::cout << "|\t\t\t\t CURRENT ORDER\t\t\t\t\t |\n";
-	std::cout << "----------------------------------------------------------------------------------\n";
-	std::cout << "NAME\t\t\tPRICE\t\t\tSTART TIME \n";
+	std::cout << "------------------------------------------------------------------------------------------------------------------------------\n";
+	std::cout << "|" << std::setw(62) << "CURRENT ORDERS" << std::setw(63) << "|" << "\n";
+	std::cout << "------------------------------------------------------------------------------------------------------------------------------\n";
+	std::cout << "NAME" << std::setw(40) << "UNIT COST" << std::setw(24) << "PRICE" << std::setw(25) << "COOK TIME" << std::setw(25) << "TABLE" << "\n";
 }
 
 
@@ -100,20 +68,20 @@ void viewActiveSubOrder()
 
 void viewActiveMenu()									// SHOWS A STATIC MENU
 {
-	std::cout << "NAME\t\t\t\tPRICE\t\t\t\n";
-	std::cout << "********************************************************\n";
-	std::cout << "[1] Hamburger \t\t\t $14\n";
-	std::cout << "[2] MilkShake \t\t\t $5\n";
-	std::cout << "[3] Coke \t\t\t $1.99\n";
+	std::cout << "------------------------------------------------------------------------------------------------------\n";
+	std::cout << "|" << std::setw(50) << "MENU" << std::setw(51) << "|" << "\n";
+	std::cout << "------------------------------------------------------------------------------------------------------\n";
+	std::cout << "NAME" << std::setw(40) << "UNIT COST" << std::setw(24) << "PRICE" << std::setw(25) << "COOK TIME" << std::setw(25) << "\n";
+	
 }
 
 
 void viewAllSubOrders()									// USED TO VIEW ALL SUBORDERS
 {
-	std::cout << "----------------------------------------------------------------------------------\n";
-	std::cout << "|\t\t\t\tACTIVE ORDERS\t\t\t\t\t |\n";
-	std::cout << "----------------------------------------------------------------------------------\n";
-	std::cout << "NAME\t\t\tPRICE\t\t\tSTART TIME \n";
+	std::cout << "-------------------------------------------------------------------------------------------------------------\n";
+	std::cout << "|" << std::setw(65) << "ACTIVE ORDERS" << std::setw(43) << "|" << "\n";
+	std::cout << "-------------------------------------------------------------------------------------------------------------\n";
+	std::cout << "NAME" << std::setw(40) << "UNIT COST" << std::setw(24) << "PRICE" << std::setw(25) << "COOK TIME" << "\n";
 
 }
 
