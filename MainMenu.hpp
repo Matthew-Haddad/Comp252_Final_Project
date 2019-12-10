@@ -82,7 +82,6 @@ void MainMenu::open_management_system_options(){
     }
 }
 
-/*
 void MainMenu::open_kitchen_system_options(){
     std::cout << "Welcome to the diner kitchen system!\nSelect an option:\n";
     std::cout << "\t[1]Display Active Orders\n\t[2]Display the Progress of Each Active Order\n\t[3]Display Meal Preferences and Options\n\t[4]Go Back\n>>";
@@ -161,8 +160,6 @@ void MainMenu::open_kitchen_system_options(){
     }
     open_kitchen_system_options();
 }
-*/
-
 
 void MainMenu::open_order_system_options() //new 
 { //new
