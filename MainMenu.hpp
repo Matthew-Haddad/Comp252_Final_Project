@@ -198,10 +198,9 @@ void MainMenu::open_order_system_options(){
 					for(MenuOption m: o.OrderOptions){
 						std::cout << counter << ". " << m.name << "\t" << m.Price << "\t"  << "\n";
 					}
-						time_t now = time(NULL);//new
-						o.orderBeginTime = now;//new
-						std::cout << o.orderBeginTime << std::endl;
-						informOrderIP(o);//new
+					o.orderBeginTime = time(NULL);
+					o.orderInProgress = true;
+					std::cout << o.orderBeginTime << " " << o.orderInProgress << std::endl;
 					counter++;
 				}
 				goto orderSystem;
