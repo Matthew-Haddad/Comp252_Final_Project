@@ -30,8 +30,6 @@ void saveOrderData(){};
 void saveWaiterData(){};
 void saveTableData(){};
 
-
-
 // viewing options
 void printIngredients();
 
@@ -49,7 +47,7 @@ void saveIngredientData(Ingredient i);
 // MenuOption Functions
 MenuOption addMenuOption();
 void viewMenuOption(MenuOption m);
-void editMenuOption();
+MenuOption editMenuOption(MenuOption m);
 void deleteMenuOption();
 void saveMenuOptionData(MenuOption i);
 
@@ -77,11 +75,8 @@ void editSeatingLayout();
 
 int option_select = 0;
 
+void checkStockLevel();
 
-
-void checkStockLevel(){
-    
-}
 
 Ingredient addIngredient(){
     std::cout << "What is the name of the ingredient you would like to add?\n>> ";
@@ -143,7 +138,7 @@ MenuOption addMenuOption(){         // fills all menu option fields except ingre
     std::cin.clear();
     std::cin >> CookTime;
     MenuOption newMenuOption(name, UnitCost, Price, CookTime);
-    std::cout << "What are to cooking options for this menu option?\n";
+    std::cout << "What are the cooking options for this menu option?\n";
     std::string cookOption = " ";
     while (cookOption != "done"){
         std::cin.clear();
@@ -154,6 +149,37 @@ MenuOption addMenuOption(){         // fills all menu option fields except ingre
     }
     return newMenuOption;
 }
+
+MenuOption editMenuOption(MenuOption m){
+    std::cout << "What is the new name of the menu option you would like to add?\n>> ";
+    std::string name;
+    std::cin.ignore();
+    std::getline(std::cin, name);
+    std::cout << "What is the new unit cost of this menu option?\n>> ";
+    double UnitCost;
+    std::cin.clear();
+    std::cin >> UnitCost;
+    std::cout << "What is the new price of this menu option?\n>> ";
+    double Price;
+    std::cin.clear();
+    std::cin >> Price;
+    std::cout << "What is the new cook time for this menu option?\n>> ";
+    double CookTime;
+    std::cin.clear();
+    std::cin >> CookTime;
+    m.setMain(name, UnitCost, Price, CookTime);
+    std::cout << "What are the new cooking options for this menu option?\n";
+    std::string cookOption = " ";
+    while (cookOption != "done"){
+        std::cin.clear();
+        std::cout << "Enter a cooking option or enter 'done' to finish adding cooking options:\n>> ";
+        std::cin >> cookOption;
+        if(cookOption != "done")
+            m.CookOptions.push_back(cookOption);
+    }
+    return m;
+}
+
 
 void viewMenuOption(MenuOption m){
     std::cout << "\n\n" << m.name << "\nUnit Cost: " << m.UnitCost;
@@ -176,15 +202,17 @@ void saveMenuOptionData(MenuOption m){
     fout.open("MenuOption_data.txt", std::ios::app);
     fout << m.name << "\n" << m.UnitCost << "\n" << m.Price << endl;
     fout << m.CookTime << "\n" << m.NumSold << "\n"  << m.TotalRevenue << endl;
+    fout.close();
+    std::ofstream fout2;
+    fout2.open("MenuOption_extraData.txt", std::ios::app);
     for ( Ingredient i : m.Ingredients){
-        fout << i.name << endl;
+        fout2 << i.name << endl;
     }
     fout << endl;
     for ( std::string c : m.CookOptions){
-        fout << c << endl;
+        fout2 << c << endl;
     }
-    fout << endl;
-    fout.close();
+    fout2.close();
 }
 
 
@@ -208,6 +236,26 @@ void viewMenu(Menu m){
         std::cout << "\t" << i.name << std::endl;
     }
     std::cout << std::endl;
+}
+
+void saveMenuData(Menu m){
+    std::ofstream fout;
+    fout.open("Menu_data.txt", std::ios::app);
+    
+    /*
+    fout << m.name << "\n" <<
+    fout.close();
+    std::ofstream fout2;
+    fout2.open("MenuOption_extraData.txt", std::ios::app);
+    for ( Ingredient i : m.Ingredients){
+        fout2 << i.name << endl;
+    }
+    fout << endl;
+    for ( std::string c : m.CookOptions){
+        fout2 << c << endl;
+    }
+    fout2.close();
+     */
 }
 
 #endif /* Management_System_hpp */
