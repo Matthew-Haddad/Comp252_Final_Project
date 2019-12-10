@@ -86,6 +86,8 @@ struct Menu{
 struct Order{
     std::vector<MenuOption> OrderOptions;
     double orderPrice;
+    time_t orderBeginTime;
+	time_t orderEndTime;
     bool orderInProgress;
     bool orderComplete;
 };
