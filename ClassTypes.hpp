@@ -26,6 +26,7 @@ struct Ingredient{
 };
 
 struct MenuOption{
+    MenuOption(){};
     MenuOption(std::string n){ name = n;}
     MenuOption(std::string n, double un, double p, double ct){
         name = n;
@@ -43,6 +44,20 @@ struct MenuOption{
         NumSold = ns;
         TotalRevenue = tr;
     }
+    void setAll(std::string n, double un, double p, double ct, double ns, double tr){
+        name = n;
+        UnitCost = un;
+        Price = p;
+        CookTime = ct;
+        NumSold = ns;
+        TotalRevenue = tr;
+    }
+    void setMain(std::string n, double un, double p, double ct){
+        name = n;
+        UnitCost = un;
+        Price = p;
+        CookTime = ct;
+    }
     std::string name;
     std::vector<Ingredient> Ingredients;
     double UnitCost;
@@ -54,6 +69,7 @@ struct MenuOption{
 };
 
 struct Discount{
+    Discount(std::string n, double da){name = n; DiscountAmount = da;}
     std::string name;
     std::vector<MenuOption> DiscountItems;
     std::vector<int> DiscountTimes;
@@ -71,7 +87,7 @@ struct Order{
     std::vector<MenuOption> OrderOptions;
     double orderPrice;
     bool orderInProgress;
-	bool orderComplete;
+    bool orderComplete;
 };
 
 struct Waiter{
@@ -87,3 +103,4 @@ struct Table{
 };
 
 #endif /* ClassTypes_hpp */
+
