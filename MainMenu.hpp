@@ -82,83 +82,80 @@ void MainMenu::open_management_system_options(){
     }
 }
 
-void MainMenu::open_kitchen_system_options(){
-    std::cout << "Welcome to the diner kitchen system!\nSelect an option:\n";
-    std::cout << "\t[1]Display Active Orders\n\t[2]Display the Progress of Each Active Order\n\t[3]Display Meal Preferences and Options\n\t[4]Go Back\n>>";
-    std::cin >> option;
-    switch(option){
-        case(1):{
-            std::cout << "\n[ACTIVE ORDERS]\n";
-            std::cout << " -------------------------------------------------------" << std::endl;
-            std::cout << "| Table #\tActive Order(s)\t\t\t\t|" << std::endl;
-            std::cout << " -------------------------------------------------------" << std::endl;
-            //            std::cout << "\t1\tHamburger" << std::endl;//example
-            //            std::cout << "\t2\tMilk Shake" << std::endl; std::cout << "\t3\tCoke" << std::endl;//example
-            
-            //displays active orders from Orders
-            int oCount =1;
-            for(Order o: Orders){
-                for(MenuOption m: o.OrderOptions){
-                    displayActiveOrders(m, oCount);
-                }
-                oCount++;
-            }
-            
-            //displays active orders from Tables
-            int tCount = 1;
-            for(Table t: Tables){
-                for(Order o: t.orders){
-                    displayActiveTableOrders(t, tCount);
-                }
-                tCount++;
-            }
-            std::cout << " -------------------------------------------------------end\n" << std::endl;
-            break;
-        }
-        case(2):{
-            std::cout << "\n[ORDERS PROGRESS]\n";
-            std::cout << " -------------------------------------------------------------------------------" << std::endl;
-            std::cout << "| Table #\tElapsed Time\tProgress\tOrder\t\t\t\t|" << std::endl;
-            std::cout << " -------------------------------------------------------------------------------" << std::endl;
-            //            std::cout << "\t1\t00:01\t\t1%\t\tHamburger" << std::endl;//example
-            int tCount = 1;
-            for(Table t: Tables){
-                displayTableProgress(t,tCount);
-                tCount++;
-            }
-            int oCount =1;
-            for(Order o: Orders){
-                std::cout << o.orderBeginTime;
-                for(MenuOption m: o.OrderOptions){
-                    displayOrderProgress(o, oCount);
-                }
-                oCount++;
-            }
-            std::cout << " -------------------------------------------------------------------------------\n" << std::endl;
-            break;
-        }
-        case(3):{
-            std::cout << "\n[MEAL PREFERENCES]\n";
-            std::cout << " ---------------------------------------------------------------------------------------------------------------" << std::endl;
-            std::cout << "| Order Name\tCook Options\t\t\t\t\tIngredients(Optional to remove)\t\t\t|" << std::endl;
-            std::cout << " ---------------------------------------------------------------------------------------------------------------" << std::endl;
-            //            std::cout << "  Hamburger\tRare\\ Medium Rare\\ Fully Cooked\\ Overcooked\\ \tChicken Patty\\ Lettuce\\ Tomato\\ Fish Patty\\" << std::endl;
-            
-            for(Menu m: Menus){
-                displayMealPreferences(m);
-            }
-            std::cout << " ---------------------------------------------------------------------------------------------------------------\n" << std::endl;
-            break;
-        }
-        case(4):{
-            mMenu();
-        }
-        default:{
-            std::cout << "Input does not match any of the options." << std::endl;
-            open_kitchen_system_options();
-        }
-    }
-    open_kitchen_system_options();
+void MainMenu::open_kitchen_system_options() {
+	std::cout << "Welcome to the diner kitchen system!\nSelect an option:\n";
+	std::cout << "\t[1]Display Active Orders\n\t[2]Display the Progress of Each Active Order\n\t[3]Display Meal Preferences and Options\n\t[4]Go Back\n>>";
+	std::cin >> option;
+	while (option < 1 || option > 4 || std::cin.fail())
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Please enter a valid option:\n>>";
+		std::cin >> option;
+	};
+	switch (option) {
+	case(1): {
+		std::cout << "\n[ACTIVE ORDERS]\n";
+		std::cout << " -------------------------------------------------------" << std::endl;
+		std::cout << "| Table #\tActive Order(s)\t\t\t\t|" << std::endl;
+		std::cout << " -------------------------------------------------------" << std::endl;
+
+		//displays active orders from Orders
+		int oCount = 1;
+		for (Order o : Orders) {
+			displayActiveOrders(o, oCount);
+			oCount++;
+		}
+
+		//displays active orders from Tables
+		int tCount = 1;
+		for (Table t : Tables) {
+			for (Order o : t.orders) {
+				displayActiveTableOrders(t, tCount);
+			}
+			tCount++;
+		}
+		std::cout << " -------------------------------------------------------end\n" << std::endl;
+		break;
+	}
+	case(2): {
+		std::cout << "\n[ORDERS PROGRESS]\n";
+		std::cout << " -------------------------------------------------------------------------------" << std::endl;
+		std::cout << "| Table #" << std::setw(22) << "Elapsed Time" << std::setw(12) << "Progress" << std::setw(13) << "Order" << std::setw(10) << "|" << std::endl;
+		std::cout << " -------------------------------------------------------------------------------" << std::endl;
+		int tCount = 1;
+		for (Table t : Tables) {
+			displayTableProgress(t, tCount);
+			tCount++;
+		}
+		int oCount = 1;
+		for (Order o : Orders) {
+			displayOrderProgress(o, oCount);
+			oCount++;
+		}
+		std::cout << " -------------------------------------------------------------------------------\n" << std::endl;
+		break;
+	}
+	case(3): {
+		std::cout << "\n[MEAL PREFERENCES]\n";
+		std::cout << " ---------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "| Order Name\tCook Options" << std::setw(67) << "Ingredients(Optional to remove)" << std::setw(18) << "|" << std::endl;
+		std::cout << " ---------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (MenuOption m: MenuOptions) {
+			displayMealPreferences(m);
+		}
+		std::cout << " ---------------------------------------------------------------------------------------------------------------\n" << std::endl;
+		break;
+	}
+	case(4): {
+		mMenu();
+	}
+	default: {
+		std::cout << "Input does not match any of the options." << std::endl;
+		open_kitchen_system_options();
+	}
+	}
+	open_kitchen_system_options();
 }
 
 void MainMenu::open_order_system_options() //new 
