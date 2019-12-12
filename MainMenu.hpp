@@ -97,7 +97,7 @@ void MainMenu::open_kitchen_system_options() {
 	case(1): {
 		std::cout << "\n[ACTIVE ORDERS]\n";
 		std::cout << " -------------------------------------------------------" << std::endl;
-		std::cout << "| Table #\tActive Order(s)\t\t\t\t|" << std::endl;
+		std::cout << "| Table #\tActive Order(s)" << std::setw(26) << "|" << std::endl;
 		std::cout << " -------------------------------------------------------" << std::endl;
 
 		//displays active orders from Orders
@@ -121,7 +121,7 @@ void MainMenu::open_kitchen_system_options() {
 	case(2): {
 		std::cout << "\n[ORDERS PROGRESS]\n";
 		std::cout << " -------------------------------------------------------------------------------" << std::endl;
-		std::cout << "| Table #" << std::setw(22) << "Elapsed Time" << std::setw(12) << "Progress" << std::setw(13) << "Order" << std::setw(10) << "|" << std::endl;
+		std::cout << "| Table #" << std::setw(22) << "Elapsed Time" << std::setw(12) << "Progress" << std::setw(13) << "Order" << std::setw(25) << "|" << std::endl;
 		std::cout << " -------------------------------------------------------------------------------" << std::endl;
 		int tCount = 1;
 		for (Table t : Tables) {
