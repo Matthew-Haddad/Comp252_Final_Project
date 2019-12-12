@@ -281,4 +281,72 @@ std::vector<std::string> createVector(std::string str){
     return returnVec;
 }
 
+void editSeatingLayout()
+{
+	int userChoice;
+	int rChoice;
+	int cChoice;
+	std::vector<std::vector<int>> seatingLayout{ {0,0,0,0,1,1,1,1},
+												 {0,0,0,0,1,1,1,1},
+												 {0,0,0,0,0,0,0,0},
+												 {0,0,0,0,0,0,0,0},
+												 {0,0,0,0,0,0,0,0},
+												 {0,0,0,0,0,0,0,0},
+												 {1,1,0,0,0,0,0,0},
+												 {1,1,0,0,0,0,0,0}};
+
+	for (int i = 0; i < seatingLayout.size(); i++) {
+		for (int j = 0; j < seatingLayout.size(); j++) {
+			std::cout << seatingLayout[i][j] << " ";
+		}
+		std::cout << "\n";
+	}
+
+	std::cout<< "What postion do you want to edit? \n";
+	std::cout << "Row Position? \n";
+	std::cin >> rChoice;
+	while (rChoice < 1 || rChoice > 8 || std::cin.fail())
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Please enter a valid option:\n>>";
+		std::cin >> rChoice;
+	};
+	std::cout << "Column Position? \n";
+	std::cin >> cChoice;
+	while (cChoice < 1 || cChoice > 8 || std::cin.fail())
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Please enter a valid option:\n>>";
+		std::cin >> cChoice;
+	};
+	std::cout << "What value do you want to enter? \n";
+	std::cout << "'0' for empty space and 1 for occupied space\n";
+	std::cin >> userChoice;
+	while (userChoice < 0 || userChoice > 1 || std::cin.fail())
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Please enter a valid option:\n>>";
+		std::cin >> userChoice;
+	};
+	for (int i = 0; i < rChoice; i++) {
+		for (int j = 0; j < cChoice; j++) {
+			seatingLayout[rChoice -1][cChoice -1] = userChoice;
+
+		}
+		for (int i = 0; i < seatingLayout.size(); i++) {
+			for (int j = 0; j < seatingLayout.size(); j++) {
+				std::cout << seatingLayout[i][j] << " ";
+			}
+			std::cout << "\n";
+		}
+		break;
+	}
+}
+
+
+
+
 #endif /* Management_System_hpp */
