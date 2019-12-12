@@ -25,7 +25,6 @@ void open_discount_options();
 void open_seating_options();
 
 void saveDiscountData(){};
-void saveMenuData(){};
 void saveOrderData(){};
 void saveWaiterData(){};
 void saveTableData(){};
@@ -57,6 +56,8 @@ void viewMenu(Menu m);
 void editMenuItems();
 void editMenuLayout();
 void deleteMenu();
+void saveMenuData(Menu m);
+
 
 // order options
 void viewCompletedOrders();
@@ -71,8 +72,12 @@ void deleteDiscount();
 void editMenuDiscount();
 
 // seating options
+void displaySeatingLayout();
 void editSeatingLayout();
+int rows = 8;
+int columns = 8;
 
+std::vector < std::vector < int > > Seating(rows, std::vector< int >(columns,0));
 int option_select = 0;
 
 void checkStockLevel();
@@ -113,7 +118,7 @@ Ingredient editIngredient(Ingredient i){
 void saveIngredientData(Ingredient i){
     std::ofstream fout;
     fout.open("Ingredient_data.txt", std::ios::app);
-    fout << i.name << "\n" << i.quantity << "\n" << i.cost << endl;
+    fout << i.name << " " << i.cost << " " << i.quantity << endl;
     fout.close();
 }
 
@@ -138,14 +143,14 @@ MenuOption addMenuOption(){         // fills all menu option fields except ingre
     std::cin.clear();
     std::cin >> CookTime;
     MenuOption newMenuOption(name, UnitCost, Price, CookTime);
+    std::string str;
     std::cout << "What are the cooking options for this menu option?\n";
-    std::string cookOption = " ";
-    while (cookOption != "done"){
+    while (str != "done"){
         std::cin.clear();
         std::cout << "Enter a cooking option or enter 'done' to finish adding cooking options:\n>> ";
-        std::cin >> cookOption;
-        if(cookOption != "done")
-            newMenuOption.CookOptions.push_back(cookOption);
+        std::cin >> str;
+        if(str != "done")
+            newMenuOption.CookOptions.push_back(str);
     }
     return newMenuOption;
 }
@@ -188,8 +193,8 @@ void viewMenuOption(MenuOption m){
     std::cout << "\nTotal Revenue: " << m.TotalRevenue;
     std::cout << "\nCook Time: " << m.CookTime;
     std::cout << "\nIngredients:\n";
-    for (Ingredient i : m.Ingredients){
-        std::cout << "\t" << i.name << std::endl;
+    for (std::string i : m.Ingredients){
+        std::cout << "\t" << i << std::endl;
     }
     std::cout << "\nCooking Options:\n";
     for (std::string i : m.CookOptions){
@@ -200,21 +205,24 @@ void viewMenuOption(MenuOption m){
 void saveMenuOptionData(MenuOption m){
     std::ofstream fout;
     fout.open("MenuOption_data.txt", std::ios::app);
-    fout << m.name << "\n" << m.UnitCost << "\n" << m.Price << endl;
-    fout << m.CookTime << "\n" << m.NumSold << "\n"  << m.TotalRevenue << endl;
+    
+    fout << m.name << " " << m.UnitCost << " " << m.Price << " ";
+    fout << m.CookTime << " " << m.NumSold << " "  << m.TotalRevenue << endl;
     fout.close();
     std::ofstream fout2;
     fout2.open("MenuOption_extraData.txt", std::ios::app);
-    for ( Ingredient i : m.Ingredients){
-        fout2 << i.name << endl;
+    for ( std::string i : m.Ingredients){
+        fout2 << i << " ";
     }
-    fout << endl;
-    for ( std::string c : m.CookOptions){
-        fout2 << c << endl;
-    }
+    //fout2 << m.Ingredients.back();
+    fout2 << endl;
     fout2.close();
+    /*
+    for ( std::string c : m.CookOptions){
+        fout << c << endl;
+    }
+     */
 }
-
 
 Menu addMenu(){
     std::cout << "What is the name of this menu?\n>> ";
@@ -226,7 +234,7 @@ Menu addMenu(){
 }
 
 void viewMenu(Menu m){
-    std::cout << "\n\n" << m.name << std::endl;
+    std::cout << "\n\nMenu name: " << m.name << std::endl;
     std::cout << "Menu Options:\n";
     for (MenuOption i : m.MenuOptions){
         std::cout << "\t" << i.name << std::endl;
@@ -241,21 +249,36 @@ void viewMenu(Menu m){
 void saveMenuData(Menu m){
     std::ofstream fout;
     fout.open("Menu_data.txt", std::ios::app);
-    
-    /*
-    fout << m.name << "\n" <<
+    fout << m.name << "\n";
     fout.close();
     std::ofstream fout2;
-    fout2.open("MenuOption_extraData.txt", std::ios::app);
-    for ( Ingredient i : m.Ingredients){
-        fout2 << i.name << endl;
+    fout2.open("Menu_extraData.txt", std::ios::app);
+    for ( MenuOption i : m.MenuOptions){
+        fout2 << i.name << " ";
     }
-    fout << endl;
-    for ( std::string c : m.CookOptions){
-        fout2 << c << endl;
+    //fout2 << m.MenuOptions.back().name;
+    fout2 << endl;
+    /*
+    for ( Discount c : m.MenuDiscounts){
+        fout2 << c.name << " ";
     }
-    fout2.close();
      */
+    fout2.close();
+}
+
+std::vector<std::string> createVector(std::string str){
+    std::vector<std::string> returnVec;
+    std::string word = "";
+    for (auto x : str){
+        if (x == ' '){
+            returnVec.push_back(word);
+            word = "";
+        }
+        else{
+            word = word + x;
+        }
+    }
+    return returnVec;
 }
 
 #endif /* Management_System_hpp */
