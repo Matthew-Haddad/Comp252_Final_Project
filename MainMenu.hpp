@@ -158,8 +158,9 @@ void MainMenu::open_kitchen_system_options() {
 	open_kitchen_system_options();
 }
 
-void MainMenu::open_order_system_options() //new 
-{ //new
+// OPEN ORDER SYSTEM MENU - NINO
+void MainMenu::open_order_system_options() //  main function for all order system tasks 
+{ 
 orderSystem:
 	std::cout << "Welcome to the Diner Order System \nPlease select an option:\n";
 	std::cout << "\t[1]Place an Order\n\t[2]View Options\n\t[3]Print Final Receipt\n\t[4]Delete Options\n\t[5]Go Back\n>> ";
@@ -201,6 +202,15 @@ orderSystem:
 			std::cout << "What would you like to order? \n";
 			std::cout << ">>";
 			std::cin >> option_select; 
+			//initializes orderBeginTime with current time and sets orderInProgress to true
+			newOrder.orderBeginTime = time(NULL);
+			for (MenuOption m : MenuOptions)
+			{
+				int cookTime = m.CookTime;
+				newOrder.orderEndTime = newOrder.orderBeginTime + cookTime;
+			}
+			newOrder.orderInProgress = true;
+			std::cout << "Your order is now In Progress" << std::endl;
 			newOrder.OrderOptions.push_back(MenuOptions[option_select - 1]);
 			Orders.push_back(newOrder);
 			goto orderSystem;
@@ -223,9 +233,17 @@ orderSystem:
 			newOrder.OrderOptions.push_back(MenuOptions[option_select - 1]);
 			newTable.number = tableCounter;
 			tableCounter++;
+			//initializes orderBeginTime with current time and sets orderInProgress to true
+			newOrder.orderBeginTime = time(NULL);
+			for (MenuOption m : MenuOptions)
+			{
+				int cookTime = m.CookTime;
+				newOrder.orderEndTime = newOrder.orderBeginTime + cookTime;
+			}
+			newOrder.orderInProgress = true;
+			std::cout << "Your order is now In Progress" << std::endl;
 			newTable.orders.push_back(newOrder);
 			Tables.push_back(newTable);
-
 			goto orderSystem;
 		}
 		else if (userChoice == 3)			// used to add to an existing order for table
@@ -282,12 +300,17 @@ orderSystem:
 			std::cout << "Please enter a valid option \n>> ";
 			std::cin >> userChoice;
 		};
-		if (userChoice == 1)
+		if (userChoice == 1)		// using an iteration of menuoptions to print out a menu. (menuoptions are stored in a text file)
 		{
-			// VIEW MENU
 			viewActiveMenu();
+			int counter = 1;
+			for (MenuOption m : MenuOptions)
+			{
+				std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << std::setw(25) << m.CookTime << "\n";
+				counter++;
+			}
 		}
-		else if (userChoice == 2)
+		else if (userChoice == 2)		
 		{
 			std::cout << "Optional Ingredients";
 		}
@@ -295,7 +318,7 @@ orderSystem:
 		{
 			std::cout << "Cooking Preferences";
 		}
-		else if (userChoice == 4)
+		else if (userChoice == 4)	// iterates through table for orders assigned to a table and iterates through orders for orders to go.
 		{
 			viewActiveSubOrder();
 			int counter = 1;
@@ -321,9 +344,52 @@ orderSystem:
 			std::cout << std::endl;
 			goto orderSystem;
 		}
-		else if (userChoice == 5)
+		else if (userChoice == 5)			// used to show a transaction list
 		{
-			std::cout << "Transaction List";
+			std::cout << "\n";
+			viewTransactionList();
+			int counter = 1;
+			double totalTableUN = 0;
+			double totalTableP = 0;
+			double totalOrderUN = 0;
+			double totalOrderP = 0;
+			double totalProfitTable = 0;
+			double totalProfitOrder = 0;
+			double totalProfit = 0;
+			for (Table t : Tables)
+			{
+				for (Order o : t.orders)
+				{
+					for (MenuOption m : o.OrderOptions)
+					{
+						std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << "\n";
+						totalTableUN += m.UnitCost;
+						totalTableP += m.Price;
+						totalProfitTable = totalTableP - totalTableUN;
+					}
+					counter++;
+				}
+			}
+			for (Order o : Orders)
+			{
+				for (MenuOption m : o.OrderOptions)
+				{
+					std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << "\n";
+					totalOrderUN += m.UnitCost;
+					totalOrderP += m.Price;
+					totalProfitOrder = totalOrderP - totalOrderUN;
+				}
+				counter++;
+			}
+			totalProfit = totalProfitOrder + totalProfitTable;
+			std::cout << "\n"; 
+			std::cout << "TOTAL PROFIT: " << std::setprecision(2) << std::fixed << totalProfit << "\n";
+			std::cout << "\n";
+
+
+
+			goto orderSystem; 
+
 		}
 		else if (userChoice == 6)
 		{
@@ -335,7 +401,7 @@ orderSystem:
 				{
 					for (MenuOption m : o.OrderOptions)
 					{
-						std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << std::setw(25) << m.CookTime << std::setw(25) << t.number << "\n";
+						std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << std::setw(25) << m.CookTime << std::setw(25) << t.number <<  "\n";
 					}
 					counter++;
 				}
@@ -350,17 +416,120 @@ orderSystem:
 			}
 			std::cout << std::endl;
 			goto orderSystem;
-		
+
 		}
-		else if (userChoice == 7)
+		else if (userChoice == 7)		//used to go back to the order system main menu
 		{
 			goto orderSystem;
 		}
+		break;
+	case 3:							// used to print a receipts
+		std::cout << "Which type of order do you want to print a receipt from? \n";
+		std::cout << "\t[1] To Go Orders \n";
+		std::cout << "\t[2] Table Orders \n";
+		std::cin >> option_select;
+		while (option_select < 1 || option_select > 2 || std::cin.fail())
+		{
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "Please enter a valid option \n>> ";
+			std::cin >> option_select;
+		};
+		if (option_select == 1)			//used to print a to go order receipt
+		{
+			Order newOrder;
+			int counter = 1;
+			viewActiveSubOrder();
+			for (Order o : Orders)
+			{
+					for (MenuOption m : o.OrderOptions)
+					{
+						std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << std::setw(25) << m.CookTime << std::setw(25) << "\n";
+						counter++;
+					}
 
-		break;
-	case 3:							// used to print certain info
-		std::cout << "Printing stuff\n";
-		break;
+					break;
+					//counter++;
+			}
+			std::cout << std::endl;
+			std::cout << "Which order do you want to print a receipt from? \n";
+			std::cin >> option_select;
+			double finalPrice = 0;
+			double taxAmount;
+			double tax = .0925;
+			printFinalReceipts();
+			for (Order o : Orders)
+			{
+				while (counter != option_select - 1)
+				{
+					for (MenuOption m : o.OrderOptions)
+					{
+						std::cout << m.name << std::setw(25) << "$" << m.Price << "\n";
+						finalPrice += m.Price;
+						taxAmount = tax * finalPrice;
+						finalPrice += taxAmount;
+					}
+					std::cout << "\n";
+					std::cout << "TAX RATE: % " << std::setprecision(4) << tax << "\n";
+					std::cout << "TAX  AMOUNT: $" << std::setprecision(2) << std::fixed << taxAmount << "\n";
+					std::cout << "FINAL PRICE: $" << std::setprecision(2) << std::fixed << finalPrice << "\n";
+					std::cout << "\n";
+					break;
+
+				}
+			}
+					goto orderSystem; 
+
+		}
+		else if (option_select == 2)	
+		{
+			int counter = 1;
+			viewActiveSubOrder();
+			for (Table t : Tables)
+			{
+				for (Order o : t.orders)
+				{
+					for (MenuOption m : o.OrderOptions)
+					{
+						std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << std::setw(25) << m.CookTime << std::setw(25) << t.number << "\n";
+					}
+					counter++;
+				}
+			}
+			std::cout << std::endl;
+			std::cout << "Which order do you want to print a receipt for? \n";
+			std::cin >> option_select;
+			double finalPrice = 0;
+			double taxAmount; 
+			double tax = .0925;
+			printFinalReceipts();
+			for (Table t : Tables)
+			{
+					while (t.number != option_select - 1)
+					{
+						for (Order o : t.orders)
+						{
+							for (MenuOption m : o.OrderOptions)
+							{
+								std::cout << m.name << std::setw(25) << "$" << m.Price << "\n";
+								finalPrice += m.Price;
+								taxAmount = tax * finalPrice; 
+								finalPrice += taxAmount;
+								
+							}
+							std::cout << "\n";
+							std::cout << "TAX RATE: % " << std::setprecision(4) << tax << "\n";
+							std::cout << "TAX  AMOUNT: $" << std::setprecision(2) << std::fixed << taxAmount << "\n";
+							std::cout << "FINAL PRICE: $" << std::setprecision(2) << std::fixed << finalPrice << "\n";
+							std::cout << "\n";
+						}
+						break;
+					}
+				
+			}
+
+			goto orderSystem; 
+		}
 
 	case 4:							// used to delete certain info
 		std::cout << "What would you like to delete?\n";
@@ -373,26 +542,103 @@ orderSystem:
 			std::cout << "Please enter a valid option \n>> ";
 			std::cin >> userChoice;
 		};
-		if (userChoice == 1)
+		if (userChoice == 1)	//used to delete an active suborder. 
 		{
-			std::cout << "Delete Active Suborder\n";
+			int counter = 1;
+			std::cout << std::endl;
+			std::cout << "What kind of order do you want to delete? \n";
+			std::cout << "\t[1] To Go Orders \n";
+			std::cout << "\t[2] Table Orders \n";
+			std::cin >> option_select;
+			while (userChoice < 1 || userChoice > 2 || std::cin.fail())
+			{
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				std::cout << "Please enter a valid option \n>> ";
+				std::cin >> userChoice;
+			};
+			if (option_select == 1)
+			{ 
+
+				viewActiveSubOrder();
+				for (Order o : Orders)
+				{
+					for (MenuOption m : o.OrderOptions)
+					{
+						std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << std::setw(25) << m.CookTime << std::setw(25) << "\n";
+					}
+					counter++;
+				}
+				std::cout << std::endl; 
+				std::cout << "Which order do you want to delete? \n";
+				std::cin >> option_select;
+				Orders.erase(Orders.begin() + option_select - 1);
+			}
+			else if (option_select == 2)
+			{
+				viewActiveSubOrder();
+				for (Table t : Tables)
+				{
+					for (Order o : t.orders)
+					{
+						for (MenuOption m : o.OrderOptions)
+						{
+							std::cout << counter << ". " << m.name << std::setw(24) << "$" << m.UnitCost << std::setw(24) << "$" << m.Price << std::setw(25) << m.CookTime << std::setw(25) << t.number << "\n";
+						}
+						counter++;
+					}
+				}
+				std::cout << std::endl;
+				std::cout << "Which order do you want to delete? \n";
+				std::cin >> option_select;
+				Tables.erase(Tables.begin() + option_select - 1);
+			}
+			goto orderSystem; 
 		}
-		else if (userChoice == 2)
+		else if (userChoice == 2)		//used to delete the transaction list of all orders 
 		{
-			std::cout << "Delete Transaction List\n";
+			std::cout << "Are you sure you want to delete the transaction list? \n";
+			std::cout << "\t[1] Delete List\n";
+			std::cout << "\t[2] Go Back\n";
+			std::cin >> userChoice; 
+			while (userChoice < 1 || userChoice > 2 || std::cin.fail())
+			{
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				std::cout << "Please enter a valid option \n>> ";
+				std::cin >> userChoice;
+			};
+			if (userChoice == 1)
+			{
+				Tables.erase(Tables.begin());
+				Orders.erase(Orders.begin());
+				std::cout << "\n";
+				std::cout << "Transaction List Deleted! \n";
+				goto orderSystem; 
+			}
+			else if (userChoice == 2)
+			{
+				std::cout << "\n";
+				std::cout << "Transaction List Not Deleted! \n";
+				goto orderSystem; 
+			}
 		}
 		else if (userChoice == 3)
 		{
 			goto orderSystem;
 		}
+
+
 	case 5:			// case 5 used to go back to the top menu
 	{
 		mMenu();	
 	}
+
 	default:
 		break;
 	}
 } //new
+
 
 void MainMenu::open_inventory_options(){
     std::cout << "Select a Menu Option:\n";
